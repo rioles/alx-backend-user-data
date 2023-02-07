@@ -41,6 +41,7 @@ $ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
 - `POST /api/v1/users`: creates a new user (JSON parameters: `email`, `password`, `last_name` (optional) and `first_name` (optional))
 - `PUT /api/v1/users/:id`: updates an user based on the ID (JSON parameters: `last_name` and `first_name`)
 
+
 0x01. Basic authentication
 ==========================
 
@@ -62,10 +63,10 @@ Back-endAuthentification
 #### In a nutshell...
 
 -   **Auto QA review:** 0.0/169 mandatory & 0.0/27 optional
--   **Altogether:**  **0.0%**
+-   **Altogether:**  **0.0%**
     -   Mandatory: 0.0%
     -   Optional: 0.0%
-    -   Calculation:  0.0% + (0.0% * 0.0%)  == **0.0%**
+    -   Calculation:  0.0% + (0.0% * 0.0%)  == **0.0%**
 
 Background Context
 ------------------
@@ -139,6 +140,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
  * Serving Flask app "app" (lazy loading)
 ...
 bob@dylan:~$
+
 ```
 
 #### Use the API *(in another tab or in your browser)*
@@ -164,6 +166,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status" -vvv
 {"status":"OK"}
 * Closing connection 0
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -198,6 +201,7 @@ In the first terminal:
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -229,6 +233,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/unauthorized" -vvv
 }
 * Closing connection 0
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -264,6 +269,7 @@ In the first terminal:
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -295,6 +301,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/forbidden" -vvv
 }
 * Closing connection 0
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -328,16 +335,20 @@ bob@dylan:~$ cat main_0.py
 """ Main 0
 """
 from api.v1.auth.auth import Auth
+
 a = Auth()
+
 print(a.require_auth("/api/v1/status/", ["/api/v1/status/"]))
 print(a.authorization_header())
 print(a.current_user())
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_0.py
 False
 None
 None
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -365,7 +376,9 @@ bob@dylan:~$ cat main_1.py
 """ Main 1
 """
 from api.v1.auth.auth import Auth
+
 a = Auth()
+
 print(a.require_auth(None, None))
 print(a.require_auth(None, []))
 print(a.require_auth("/api/v1/status/", []))
@@ -373,6 +386,7 @@ print(a.require_auth("/api/v1/status/", ["/api/v1/status/"]))
 print(a.require_auth("/api/v1/status", ["/api/v1/status/"]))
 print(a.require_auth("/api/v1/users", ["/api/v1/status/"]))
 print(a.require_auth("/api/v1/users", ["/api/v1/status/", "/api/v1/stats"]))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_1.py
 True
@@ -383,6 +397,7 @@ False
 True
 True
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -426,6 +441,7 @@ In the first terminal:
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=auth python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -451,6 +467,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Test"
   "error": "Forbidden"
 }
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -479,6 +496,7 @@ In the first terminal:
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=basic_auth python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -504,6 +522,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Test"
   "error": "Forbidden"
 }
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -531,7 +550,9 @@ bob@dylan:~$ cat main_2.py
 """ Main 2
 """
 from api.v1.auth.basic_auth import BasicAuth
+
 a = BasicAuth()
+
 print(a.extract_base64_authorization_header(None))
 print(a.extract_base64_authorization_header(89))
 print(a.extract_base64_authorization_header("Holberton School"))
@@ -539,6 +560,7 @@ print(a.extract_base64_authorization_header("Basic Holberton"))
 print(a.extract_base64_authorization_header("Basic SG9sYmVydG9u"))
 print(a.extract_base64_authorization_header("Basic SG9sYmVydG9uIFNjaG9vbA=="))
 print(a.extract_base64_authorization_header("Basic1234"))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_2.py
 None
@@ -549,6 +571,7 @@ SG9sYmVydG9u
 SG9sYmVydG9uIFNjaG9vbA==
 None
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -575,13 +598,16 @@ bob@dylan:~$ cat main_3.py
 """ Main 3
 """
 from api.v1.auth.basic_auth import BasicAuth
+
 a = BasicAuth()
+
 print(a.decode_base64_authorization_header(None))
 print(a.decode_base64_authorization_header(89))
 print(a.decode_base64_authorization_header("Holberton School"))
 print(a.decode_base64_authorization_header("SG9sYmVydG9u"))
 print(a.decode_base64_authorization_header("SG9sYmVydG9uIFNjaG9vbA=="))
 print(a.decode_base64_authorization_header(a.extract_base64_authorization_header("Basic SG9sYmVydG9uIFNjaG9vbA==")))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_3.py
 None
@@ -591,6 +617,7 @@ Holberton
 Holberton School
 Holberton School
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -619,12 +646,15 @@ bob@dylan:~$ cat main_4.py
 """ Main 4
 """
 from api.v1.auth.basic_auth import BasicAuth
+
 a = BasicAuth()
+
 print(a.extract_user_credentials(None))
 print(a.extract_user_credentials(89))
 print(a.extract_user_credentials("Holberton School"))
 print(a.extract_user_credentials("Holberton:School"))
 print(a.extract_user_credentials("bob@gmail.com:toto1234"))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_4.py
 (None, None)
@@ -633,6 +663,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_4.py
 ('Holberton', 'School')
 ('bob@gmail.com', 'toto1234')
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -662,6 +693,7 @@ bob@dylan:~$ cat main_5.py
 import uuid
 from api.v1.auth.basic_auth import BasicAuth
 from models.user import User
+
 """ Create a user test """
 user_email = str(uuid.uuid4())
 user_clear_pwd = str(uuid.uuid4())
@@ -672,18 +704,26 @@ user.last_name = "Dylan"
 user.password = user_clear_pwd
 print("New user: {}".format(user.display_name()))
 user.save()
+
 """ Retreive this user via the class BasicAuth """
+
 a = BasicAuth()
+
 u = a.user_object_from_credentials(None, None)
 print(u.display_name() if u is not None else "None")
+
 u = a.user_object_from_credentials(89, 98)
 print(u.display_name() if u is not None else "None")
+
 u = a.user_object_from_credentials("email@notfound.com", "pwd")
 print(u.display_name() if u is not None else "None")
+
 u = a.user_object_from_credentials(user_email, "pwd")
 print(u.display_name() if u is not None else "None")
+
 u = a.user_object_from_credentials(user_email, user_clear_pwd)
 print(u.display_name() if u is not None else "None")
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_5.py
 New user: Bob Dylan
@@ -693,6 +733,7 @@ None
 None
 Bob Dylan
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -728,6 +769,7 @@ bob@dylan:~$ cat main_6.py
 import base64
 from api.v1.auth.basic_auth import BasicAuth
 from models.user import User
+
 """ Create a user test """
 user_email = "bob@hbtn.io"
 user_clear_pwd = "H0lbertonSchool98!"
@@ -736,8 +778,10 @@ user.email = user_email
 user.password = user_clear_pwd
 print("New user: {} / {}".format(user.id, user.display_name()))
 user.save()
+
 basic_clear = "{}:{}".format(user_email, user_clear_pwd)
 print("Basic Base64: {}".format(base64.b64encode(basic_clear.encode('utf-8')).decode("utf-8")))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_6.py
 New user: 9375973a-68c7-46aa-b135-29f79e837495 / bob@hbtn.io
@@ -746,6 +790,7 @@ bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=basic_auth python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -783,6 +828,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic Ym
   }
 ]
 bob@dylan:~$
+
 ```
 
 **Repo:**
@@ -808,16 +854,20 @@ bob@dylan:~$ cat main_100.py
 import base64
 from api.v1.auth.basic_auth import BasicAuth
 from models.user import User
+
 """ Create a user test """
 user_email = "bob100@hbtn.io"
 user_clear_pwd = "H0lberton:School:98!"
+
 user = User()
 user.email = user_email
 user.password = user_clear_pwd
 print("New user: {}".format(user.id))
 user.save()
+
 basic_clear = "{}:{}".format(user_email, user_clear_pwd)
 print("Basic Base64: {}".format(base64.b64encode(basic_clear.encode('utf-8')).decode("utf-8")))
+
 bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_100.py
 New user: 5891469b-d2d5-4d33-b05d-02617d665368
@@ -826,6 +876,7 @@ bob@dylan:~$
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=basic_auth python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
+
 ```
 
 In a second terminal:
@@ -871,6 +922,7 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic Ym
   }
 ]
 bob@dylan:~$
+
 ```
 
 **Repo:**
